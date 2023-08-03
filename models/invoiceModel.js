@@ -20,7 +20,8 @@ const invoiceSchema = new mongoose.Schema({
   },
   style:{
     type: String,
-    enum: ["1","2","3"]
+    enum: ["1","2","3"],
+    default: '1'
   },
   emailSent:{
     type: Boolean,

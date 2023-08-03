@@ -34,7 +34,7 @@ exports.sendmail = async (req, res, next) => {
             </tr>
             <tr>
                 <td style="padding: 20px; text-align: justify; font-size: 16px; color: #3d5d36;">
-                    <h4>Hello dear ${data.UserName},</h4>
+                    <h4>Hello dear User,</h4>
                     <p>Greetings of the day,
                         <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This email is to inform you that you have an
                         invoice generated with Mokaro for this month. We have sent you the amount in this mail. If you
@@ -45,7 +45,7 @@ exports.sendmail = async (req, res, next) => {
 
             <tr>
                 <td style="padding: 20px; text-align: center;">
-                    <a href=http://127.0.0.1:3000/getInvoice/${req.body.invoiceId}
+                    <a href=http://127.0.0.1:3000/get-invoice/${req.body.invoiceId}
                         style="display: inline-block; background-color: #3375cc; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View
                         Invoice</a>
                 </td>
@@ -79,6 +79,21 @@ exports.createInvoice = async (req, res, next) => {
   console.log(req.body)
   let newInvoice = await Invoice.create(
     req.body
+  )
+  res.json(newInvoice)
+  } catch (err) {
+    let message = "unable to generate invoice"
+    return res.json({
+      err
+    })
+  }
+};
+
+exports.changeTemplate = async (req, res, next) => {
+  try {
+  
+   let newInvoice=await Invoice.findByIdAndUpdate(
+    req.body.invoiceId, {style: req.body.style}
   )
   res.json(newInvoice)
   } catch (err) {
