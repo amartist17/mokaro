@@ -11,7 +11,7 @@ const invoiceSchema = new mongoose.Schema({
   sender: {
     type: String,
     lowercase: true,
-    validate: [true, "Please enter a sender name"],
+    required: [true, "Please enter a sender name"],
   },
   receiver: {
     type: String,
@@ -24,15 +24,24 @@ const invoiceSchema = new mongoose.Schema({
   },
   emailSent:{
     type: Boolean,
+    default: false,
   },
   tax:{
     type: String,
   },
-  items:[{
-    name: String,
-    quantity: Number,
-    price: Number
-  }]
+  itemName:{
+    type: String,
+  },
+  itemPrice:{
+    type: Number,
+  },
+  itemQuantity:{
+    type: Number,
+  },
+  date: {
+    type: Date,
+    default: new Date(),
+  },
 
 });
 

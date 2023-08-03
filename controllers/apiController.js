@@ -1,4 +1,5 @@
 const Invoice = require('../models/invoiceModel')
+const nodemailer = require("nodemailer");
 
 exports.sendmail = async (req, res, next) => {
   try {
@@ -8,14 +9,15 @@ exports.sendmail = async (req, res, next) => {
       secure: true,
       auth: {
         user: "mokaro.agumentik@gmail.com",
-        pass: "hjofqozdxodoosmi",
+        pass: process.env.EMAILKEY,
       },
     });
+
     async function notifyCustomer() {
       data = { "UserName": "Sanjay Kumar", "Amount": 200 };
       let info = await transporter.sendMail({
         from: `"Manager of Sales" <mokaro.agumentik@gmail.com>`,
-        to: "sanjaykumarkonakandla@gmail.com",
+        to: `${req.body.reciever}`,
         subject: `✅ Your invoice in Mokaro is generated for this month.`,
         html: `
                 <div style="display: flex; justify-content: center;">
@@ -43,7 +45,7 @@ exports.sendmail = async (req, res, next) => {
 
             <tr>
                 <td style="padding: 20px; text-align: center;">
-                    <a href=${process.env.SERVER_URL}
+                    <a href=http://127.0.0.1:3000/getInvoice/${req.body.invoiceId}
                         style="display: inline-block; background-color: #3375cc; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View
                         Invoice</a>
                 </td>
@@ -60,33 +62,29 @@ exports.sendmail = async (req, res, next) => {
       });
       // console.log(info.messageId);
     }
-<<<<<<< HEAD
-  };
-  
-  exports.createInvoice = async (req, res, next) => {
-    try {
-    //   hi
-    console.log(req.body)
-    let newInvoice = await Invoice.create(
-      req.body
-    )
-    } catch (err) {
-      let message = "unable to generate invoice"
-      return res.render("error", {
-        status: 400,
-        message: message,
-      });
-    }
-  };
-  
-=======
+
     notifyCustomer();
+    res.send("mail sent")
   } catch (err) {
     let message = "unable to send mail"
-    return res.render("error", {
-      status: 400,
-      message: message,
-    });
+    console.log(err)
+    return res.json({
+      err
+    })
   }
 };
->>>>>>> 5c11fa99fb826e14aaad371eea2805b66a7ba573
+
+exports.createInvoice = async (req, res, next) => {
+  try {
+  console.log(req.body)
+  let newInvoice = await Invoice.create(
+    req.body
+  )
+  res.json(newInvoice)
+  } catch (err) {
+    let message = "unable to generate invoice"
+    return res.json({
+      err
+    })
+  }
+};

@@ -1,15 +1,19 @@
-// const Data = require('../models/dataModel')
+const Invoice = require('../models/invoiceModel')
 
-exports.home = async (req, res, next) => {
-  let title = await Data.findOne({name: "title"})
-  let email = await Data.findOne({name: "email"})
-  let address = await Data.findOne({name: "address"})
+exports.table = async (req, res, next) => {
+  let invoices = await Invoice.find()
 
-  res.status(200).render("index", {
-    title: title.data,
-    email: email.data,
-    address: address.data
-  });
+  res.json({
+    invoices
+  })
+};
+
+exports.getInvoice = async (req, res, next) => {
+  let invoices = await Invoice.findById(req.params.id)
+
+  res.json({
+    invoices
+  })
 };
 
 exports.files = async (req, res, next) => {
@@ -20,9 +24,9 @@ exports.contact = async (req, res, next) => {
   res.status(200).render("contact");
 };
 
-exports.login = async (req, res, next) => {
-  res.status(200).render('login', {message:""});
-};
+// exports.login = async (req, res, next) => {
+//   res.status(200).render('login', {message:""});
+// };
 
 exports.loginCheck = async (req, res, next) => {
   if (req.body.id == "admin" && req.body.password == "admin") {

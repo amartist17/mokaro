@@ -1,6 +1,6 @@
 const express = require("express");
 const viewController = require('../controllers/viewController')
-// const apiController = require('../controllers/apiController')
+const apiController = require('../controllers/apiController')
 const authController = require('../controllers/authController')
 const router = express.Router({ mergeParams: true });
 
